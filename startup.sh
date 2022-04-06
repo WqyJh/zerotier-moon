@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# usage ./startup.sh -4 1.2.3.4 -6 2001:abcd:abcd::1 -p 9993 -n network_id -t /path/to/token -d domain.search
+# usage ./startup.sh -4 1.2.3.4 -6 2001:abcd:abcd::1 -p 9993 -n network_id
 
 moon_port=9993 # default ZeroTier moon port
 
@@ -22,14 +22,6 @@ do
              n)
                 network_id="$OPTARG"
                 echo "Join network id: $network_id"
-                ;;
-             t)
-                network_token="$OPTARG"
-                echo "Network token: $network_token"
-                ;;
-             d)
-                search_domain="$OPTARG"
-                echo "Search domain: $search_domain"
                 ;;
              ?)
             echo "unknown argument"
@@ -61,7 +53,6 @@ if [ -d "/var/lib/zerotier-one/moons.d" ] # check if the moons conf has generate
 then
         moon_id=$(cat /var/lib/zerotier-one/identity.public | cut -d ':' -f1)
         echo "Your ZeroTier moon id is \033[0;31m$moon_id\033[0m, you could orbit moon using \033[0;31m\"zerotier-cli orbit $moon_id $moon_id\"\033[0m"
-        nohup /usr/sbin/zerotier-one &
 else
         nohup /usr/sbin/zerotier-one &
         # Waiting for identity generation...'
@@ -76,11 +67,10 @@ else
         pkill zerotier-one
         moon_id=$(cat /var/lib/zerotier-one/moon.json | grep \"id\" | cut -d '"' -f4)
         echo "Your ZeroTier moon id is \033[0;31m$moon_id\033[0m, you could orbit moon using \033[0;31m\"zerotier-cli orbit $moon_id $moon_id\"\033[0m"
-        nohup /usr/sbin/zerotier-one &
 fi
 
 # /usr/sbin/zerotier-cli set ${network_id} allowDNS=1
 
 /usr/sbin/zerotier-cli join ${network_id}
 
-exec /usr/bin/zeronsd start -vvv -t ${network_token} -w -d ${search_domain} ${network_id}
+exec /usr/sbin/zerotier-one

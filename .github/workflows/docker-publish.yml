@@ -7,7 +7,7 @@ name: Docker
 
 on:
   schedule:
-    - cron: '12 16 * * 4'
+    - cron: '15 11 * * 5'
   push:
     branches: [ main ]
     # Publish semver tags as releases.
@@ -17,7 +17,7 @@ on:
 
 env:
   DOCKER_HUB_USER: wqyjh
-  IMAGE_NAME: wqyjh/zerotier-moon-zeronsd
+  IMAGE_NAME: wqyjh/zerotier-moon
 
 jobs:
   build:

@@ -1,5 +1,3 @@
-FROM zerotier/zeronsd:latest as buildenv
-
 FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -12,12 +10,10 @@ RUN apt-get update -qq && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=buildenv /usr/bin/zeronsd /usr/bin/zeronsd
-
 LABEL maintainer="WqyJh <qiyingwangwqy@gmail.com>"
 
 COPY startup.sh /startup.sh
 
-EXPOSE 53/udp
+EXPOSE 9993/udp
 
 ENTRYPOINT ["/startup.sh"]
