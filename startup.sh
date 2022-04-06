@@ -73,7 +73,6 @@ else
         /usr/sbin/zerotier-idtool genmoon /var/lib/zerotier-one/moon.json > /dev/null
         mkdir /var/lib/zerotier-one/moons.d
         mv *.moon /var/lib/zerotier-one/moons.d/
-        /usr/sbin/zerotier-cli join ${network_id}
         pkill zerotier-one
         moon_id=$(cat /var/lib/zerotier-one/moon.json | grep \"id\" | cut -d '"' -f4)
         echo "Your ZeroTier moon id is \033[0;31m$moon_id\033[0m, you could orbit moon using \033[0;31m\"zerotier-cli orbit $moon_id $moon_id\"\033[0m"
@@ -81,5 +80,7 @@ else
 fi
 
 # /usr/sbin/zerotier-cli set ${network_id} allowDNS=1
+
+/usr/sbin/zerotier-cli join ${network_id}
 
 exec /usr/bin/zeronsd start -vvv -t ${network_token} -w -d ${search_domain} ${network_id}
